@@ -3,6 +3,8 @@ import asyncio
 import sys
 from aiogram import Bot
 from aiogram import Dispatcher
+from aiogram.enums import ParseMode
+from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 
 from stt_bot.config import Config
 from stt_bot.handlers import main_router
@@ -17,13 +19,14 @@ def get_app() -> Bot:
     if not token:
         logging.info("no token provided, exit")
         exit(1)
-    bot = Bot(token=settings.BOT_TOKEN, parse_mode="Markdown")
+    bot = Bot(token=settings.BOT_TOKEN, parse_mode=ParseMode.MARKDOWN)
     return bot
 
 
 async def main():
     bot = get_app()
     dp.include_router(main_router)
+    dp.callback_query.middleware(CallbackAnswerMiddleware())
     await dp.start_polling(bot)
 
 
