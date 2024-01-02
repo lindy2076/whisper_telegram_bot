@@ -43,11 +43,11 @@ async def voice_handler(message: types.Message, bot: Bot):
     file_id = message.voice.file_id
     tmp_filename = f"tmp/{file_id}.ogg"
     await bot.download(file=file_id, destination=tmp_filename)
-    await message.reply(f"msg downloaded!")
+    ms = await message.reply(f"msg downloaded!")
     
     cnv = Converter(tmp_filename, model.model)
     res, lang = cnv.speech_to_text()
-    await message.reply(res + "\n"*2 + f"Detected language: {lang}")
+    await ms.edit_text(res + "\n"*2 + f"Detected language: {lang}")
     cnv.cleanup()
 
 
@@ -61,16 +61,22 @@ async def video_note_handler(message: types.Message, bot: Bot):
     file_id = message.video_note.file_id
     tmp_filename = f"tmp/{file_id}.mp4"
     await bot.download(file=file_id, destination=tmp_filename)
-    await message.reply(f"video downloaded!")
+    ms = await message.reply(f"video downloaded!")
+
     cnv = Converter(tmp_filename, model.model, is_video=True)
     res, lang = cnv.speech_to_text()
-    await message.reply(res + "\n"*2 + f"Detected language: {lang}")
+    await ms.edit_text(res + "\n"*2 + f"Detected language: {lang}")
     cnv.cleanup()
 
 
 @main_router.message()
 async def voice_handler(message: types.Message):
     await message.reply("I can't convert this message type. It is not a voice message, video or video note.")
+
+
+@main_router.callback_query(~SentFrom(config.ADMIN_ID))
+async def non_admin_callback_handler(query: types.CallbackQuery):
+    await query.answer("You have absolutely no rights to click these buttons")
 
 
 @main_router.callback_query(WhisperModelCallback.filter())

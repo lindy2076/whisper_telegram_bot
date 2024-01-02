@@ -49,6 +49,6 @@ class Converter():
         res = self.whisper_model.transcribe(self.file_path)
         logging.info(f"audio {self.file_path} transcribed")
         return res["text"], res["language"]
-        
+
     def cleanup(self):
         remove(self.file_path)
