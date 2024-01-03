@@ -69,9 +69,9 @@ async def video_note_handler(message: types.Message, bot: Bot):
     await bot.download(file=file_id, destination=tmp_filename)
     ms = await message.reply(f"video downloaded!")
 
-    cnv = Converter(tmp_filename, model, is_video=True)
+    cnv = Converter(tmp_filename, model, f"{ms.chat.id}_{ms.message_id}", is_video=True)
     res, lang = cnv.speech_to_text()
-    await ms.edit_text(Response.stt_response(res, lang, model.mdl))
+    await ms.edit_text(Response.stt_response(res, lang, model.mdl), reply_markup=format_response_kb)
     cnv.cleanup()
 
 
