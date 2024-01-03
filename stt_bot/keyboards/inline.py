@@ -9,7 +9,7 @@ class WhisperModelCallback(CallbackData, prefix="whi_model"):
     mdl_type: str
 
 
-class FormatResponseCallback(CallbackData, prefix="fmt_re"):
+class ManageTranscriptCallback(CallbackData, prefix="fmt_re"):
     fmt: str
 
 
@@ -25,22 +25,22 @@ def build_whisper_kb() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def build_format_response_kb() -> InlineKeyboardMarkup:
+def build_manage_transcript_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     button_data = [
         ("📜 just text", "text"),
         ("🕒️ timings", "timings"),
-        ("🗑️ cleanup", "cleanup")
+        ("🗑️ cleanup", "c_up")
     ]
 
     for fmt, cb in button_data:
         builder.button(
             text=fmt,
-            callback_data=FormatResponseCallback(fmt=cb).pack()
+            callback_data=ManageTranscriptCallback(fmt=cb).pack()
         )
 
     return builder.as_markup()
 
 
 whisper_kb = build_whisper_kb()
-format_response_kb = build_format_response_kb()
+manage_transcript_kb = build_manage_transcript_kb()

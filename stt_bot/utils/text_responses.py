@@ -23,6 +23,12 @@ class Response(str):
 
     @classmethod
     def stt_response(cls, result, lang: str = None, mdl: str = None) -> str:
+        """
+        returns formatted result:
+        *Result*
+        Detected language: *lang*  (if provided)
+        Model: *mdl*               (if provided)
+        """
         if lang is None and mdl is None:
             return f"{result}"
         return f"{result}\n\nDetected language: {lang}\nModel: {mdl}"

@@ -12,7 +12,7 @@ from stt_bot.utils import (
 )
 from stt_bot.keyboards import (
     WhisperModelCallback, whisper_kb, start_kb,
-    format_response_kb, FormatResponseCallback
+    manage_transcript_kb, ManageTranscriptCallback
 )
 
 
@@ -64,7 +64,7 @@ async def voice_handler(message: types.Message, bot: Bot):
     res, lang = cnv.speech_to_text()
     await ms.edit_text(
         Response.stt_response(res, lang, model.mdl),
-        reply_markup=format_response_kb
+        reply_markup=manage_transcript_kb
     )
     cnv.cleanup()
 
@@ -86,7 +86,7 @@ async def video_note_handler(message: types.Message, bot: Bot):
     res, lang = cnv.speech_to_text()
     await ms.edit_text(
         Response.stt_response(res, lang, model.mdl),
-        reply_markup=format_response_kb
+        reply_markup=manage_transcript_kb
     )
     cnv.cleanup()
 
@@ -123,7 +123,7 @@ async def whisper_callback_handler(
     await delete_message_after(ans2, 5)
 
 
-@main_router.callback_query(FormatResponseCallback.filter(F.fmt == "cleanup"))
+@main_router.callback_query(ManageTranscriptCallback.filter(F.fmt == "c_up"))
 async def fmt_cleanup_callback_handler(
     query: types.CallbackQuery, callback_data: WhisperModelCallback
 ):
@@ -140,9 +140,9 @@ async def fmt_cleanup_callback_handler(
         await query.message.answer(Response.SOMETHING_WRONG)
 
 
-@main_router.callback_query(FormatResponseCallback.filter())
+@main_router.callback_query(ManageTranscriptCallback.filter())
 async def fmt_callback_handler(
-    query: types.CallbackQuery, callback_data: WhisperModelCallback
+    query: types.CallbackQuery, callback_data: ManageTranscriptCallback
 ):
     """reply to whisper model selection keyboard callback"""
     await query.answer()
@@ -152,7 +152,7 @@ async def fmt_callback_handler(
     fmted_res = Response.stt_response(res).strip()
     if fmted_res != query.message.text:
         await query.message.edit_text(
-            fmted_res, reply_markup=format_response_kb
+            fmted_res, reply_markup=manage_transcript_kb
         )
     else:
         logging.info("same text, didn't edit")

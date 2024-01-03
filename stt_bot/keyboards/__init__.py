@@ -1,7 +1,7 @@
 from .inline import (
     WhisperModelCallback,
     whisper_kb,
-    format_response_kb, FormatResponseCallback
+    manage_transcript_kb, ManageTranscriptCallback
 )
 from .reply import (
     start_kb
@@ -11,5 +11,5 @@ from .reply import (
 __all__ = [
     "WhisperModelCallback",
     "whisper_kb", "start_kb",
-    "format_response_kb", "FormatResponseCallback"
+    "manage_transcript_kb", "ManageTranscriptCallback"
 ]
