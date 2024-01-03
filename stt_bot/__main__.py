@@ -5,7 +5,6 @@ from os import makedirs
 from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram.enums import ParseMode
-from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 
 from stt_bot.config import Config
 from stt_bot.handlers import main_router

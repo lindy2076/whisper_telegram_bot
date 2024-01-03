@@ -20,18 +20,23 @@ def try_remove(filename) -> bool:
 
 
 class Converter():
-    def __init__(self, file_path, whisper_model, msg_id, is_video: bool = False):
+    def __init__(self, file_path, whisper_model,
+                 msg_id, is_video: bool = False):
         self.file_path = file_path
         self.whisper_model = whisper_model
         self.msg_id = msg_id
         self.is_video = is_video
 
     def speech_to_text(self) -> tuple[str, str]:
-        """get transcription and detected language + save transcripts to file named *msg_id*.txt"""
+        """
+        get transcription and detected language
+        + save transcripts to file named *msg_id*.txt
+        """
         if self.is_video:
             new_path = self.file_path.replace(".mp4", ".wav")
             subprocess.run(
-                ["ffmpeg", "-i", self.file_path, new_path, "-loglevel", "quiet"]
+                ["ffmpeg", "-i", self.file_path, new_path,
+                 "-loglevel", "quiet"]
             )
             logging.info(f"video {self.file_path} converted to .wav")
             self.cleanup()
@@ -40,7 +45,9 @@ class Converter():
         logging.info(f"audio {self.file_path} transcribed")
 
         with open(f"tmp/{self.msg_id}.txt", 'w') as f:
-            fmted_res = Response.stt_response(res["text"], res["language"], self.whisper_model.mdl)
+            fmted_res = Response.stt_response(
+                res["text"], res["language"], self.whisper_model.mdl
+            )
             f.write(fmted_res + FMT_SEPARATOR + self.parse_timings(res))
 
         return res["text"], res["language"]
@@ -56,9 +63,13 @@ class Converter():
         res = ""
         for segment in segments:
             s, e = segment['start'], segment['end']
-            res += f"\[ {str(datetime.timedelta(seconds=int(s)))} -> {str(datetime.timedelta(seconds=int(e)))} ]: {segment['text']}\n"
+            s_fmted = str(datetime.timedelta(seconds=int(s)))
+            e_fmted = str(datetime.timedelta(seconds=int(e)))
+            res += f"( {s_fmted} -> {e_fmted} ): {segment['text']}\n"
 
-        return Response.stt_response(res, dict_['language'], self.whisper_model.mdl)
+        return Response.stt_response(
+            res, dict_['language'], self.whisper_model.mdl
+        )
 
 
 def read_from_file(filename: str, fmt: str) -> str:
