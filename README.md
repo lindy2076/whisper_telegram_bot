@@ -18,6 +18,8 @@ The app requires **FFmpeg** to convert videos.
 
 > Note that this bot is for single use only. Whisper takes some time to convert audios and it requires a lot of computing power.
 
+Transcripts are stored in `tmp/` folder. Filename contains chat_id and message_id so they can be removed by clicking the cleanup button.
+
 ### Screenshots
 
 ![Screenshot from 2024-01-03 18-42-11](https://github.com/lindy2076/whisper_telegram_bot/assets/67479681/96112da5-8efe-4495-b08a-3a6327b8991a)
