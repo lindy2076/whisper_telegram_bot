@@ -1,6 +1,7 @@
 import logging
 import asyncio
 import sys
+from os import makedirs
 from aiogram import Bot
 from aiogram import Dispatcher
 from aiogram.enums import ParseMode
@@ -30,6 +31,7 @@ async def main():
 
 
 if __name__ == "__main__":
+    makedirs("tmp/", exist_ok=True)
     logging.basicConfig(
         format='%(levelname)s:%(asctime)s %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
