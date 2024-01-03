@@ -17,3 +17,10 @@ The app requires **FFmpeg** to convert videos.
 
 
 > Note that this bot is for single use only. Whisper takes some time to convert audios and it requires a lot of computing power.
+
+### Screenshots
+
+![Screenshot from 2024-01-03 18-42-11](https://github.com/lindy2076/whisper_telegram_bot/assets/67479681/96112da5-8efe-4495-b08a-3a6327b8991a)
+![Screenshot from 2024-01-03 18-42-00](https://github.com/lindy2076/whisper_telegram_bot/assets/67479681/6d1e718f-c6b8-44b4-a608-0634721cc338)
+![Screenshot from 2024-01-03 18-52-04](https://github.com/lindy2076/whisper_telegram_bot/assets/67479681/c47ae500-4151-444a-9735-c5f4b13be326)
+![Screenshot from 2024-01-03 18-51-55](https://github.com/lindy2076/whisper_telegram_bot/assets/67479681/5918bad6-4c20-4120-9869-406f3e258432)
