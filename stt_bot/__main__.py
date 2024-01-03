@@ -34,8 +34,7 @@ if __name__ == "__main__":
     logging.basicConfig(
         format='%(levelname)s:%(asctime)s %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
-        stream=sys.stdout,
-        # filename='zlogz.log',
+        filename='zlogz.log',
         level=logging.INFO
     )
     asyncio.run(main())
