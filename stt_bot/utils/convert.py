@@ -43,6 +43,7 @@ class Converter():
             self.file_path = new_path
         res = self.whisper_model.model.transcribe(self.file_path)
         logging.info(f"audio {self.file_path} transcribed")
+        self.cleanup()
 
         with open(f"tmp/{self.msg_id}.txt", 'w') as f:
             fmted_res = Response.stt_response(

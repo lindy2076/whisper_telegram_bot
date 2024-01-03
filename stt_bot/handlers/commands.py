@@ -40,8 +40,9 @@ async def start_admin_handler(message: types.Message):
 @main_router.message(Command('model'))
 async def model_select_handler(message: types.Message):
     """selection of Whisper model"""
-    await message.answer(Response.select_curr_model(model.mdl),
-                         reply_markup=whisper_kb)
+    await message.answer(
+        Response.select_curr_model(model.mdl), reply_markup=whisper_kb
+    )
 
 
 @main_router.message(Command('help'))
@@ -66,7 +67,6 @@ async def voice_handler(message: types.Message, bot: Bot):
         Response.stt_response(res, lang, model.mdl),
         reply_markup=manage_transcript_kb
     )
-    cnv.cleanup()
 
 
 @main_router.message(F.video)
@@ -88,7 +88,6 @@ async def video_note_handler(message: types.Message, bot: Bot):
         Response.stt_response(res, lang, model.mdl),
         reply_markup=manage_transcript_kb
     )
-    cnv.cleanup()
 
 
 @main_router.message()
