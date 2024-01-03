@@ -10,4 +10,4 @@ class Config:
     """default config"""
     BOT_TOKEN: str = environ.get("BOT_TOKEN", "")
     ADMIN_ID: str = environ.get("ADMIN_ID", "")
-    DEBUG: str = environ.get("DEBUG", True)
+    DEBUG: str = environ.get("DEBUG", "True")

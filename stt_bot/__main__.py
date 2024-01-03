@@ -26,7 +26,6 @@ def get_app() -> Bot:
 async def main():
     bot = get_app()
     dp.include_router(main_router)
-    dp.callback_query.middleware(CallbackAnswerMiddleware())
     await dp.start_polling(bot)
 
 
