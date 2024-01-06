@@ -53,11 +53,14 @@ async def help_handler(message: types.Message):
     )
 
 
-@main_router.message(F.voice)
+@main_router.message(F.voice | F.audio)
 async def voice_handler(message: types.Message, bot: Bot):
-    """convert voice message to text"""
-    file_id = message.voice.file_id
-    tmp_filename = f"tmp/{file_id}.ogg"
+    """convert voice message or audio to text"""
+    if message.voice:
+        file_id = message.voice.file_id
+    else:
+        file_id = message.audio.file_id
+    tmp_filename = f"tmp/{file_id}"
     await bot.download(file=file_id, destination=tmp_filename)
     ms = await message.reply("msg downloaded!")
 
