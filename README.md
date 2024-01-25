@@ -16,7 +16,7 @@ The app requires **FFmpeg** to convert videos.
 6. Forward a voice message or a video note to transcribe.
 
 
-> Note that this bot is for single use only. Whisper takes some time to convert audios and it requires a lot of computing power.
+> Note that this bot is for single use only. Whisper takes some time to convert audios and it requires a lot of computing power. Nevertheless, convertion is not blocking the app. Audios and videos are added to a queue and processed in order.
 
 Transcripts are stored in `tmp/` folder. Filename contains chat_id and message_id so they can be removed by clicking the cleanup button.
 
