@@ -1,5 +1,7 @@
+import asyncio
 import datetime
 import subprocess
+import threading
 import logging
 from os import remove
 
@@ -26,6 +28,8 @@ class Converter():
         self.whisper_model = whisper_model
         self.msg_id = msg_id
         self.is_video = is_video
+        self.converted = False
+        self.result = None
 
     def speech_to_text(self) -> tuple[str, str]:
         """
@@ -50,8 +54,8 @@ class Converter():
                 res["text"], res["language"], self.whisper_model.mdl
             )
             f.write(fmted_res + FMT_SEPARATOR + self.parse_timings(res))
-
-        return res["text"], res["language"]
+        self.converted = True
+        self.result = res["text"], res["language"]
 
     def cleanup(self):
         """remove file associated with the converter"""
@@ -80,3 +84,13 @@ def read_from_file(filename: str, fmt: str) -> str:
         return res.split(FMT_SEPARATOR)[0]
     elif fmt == "timings":
         return res.split(FMT_SEPARATOR)[1]
+
+
+async def convert_in_thread(cnv: Converter):
+    """call Converter.speech_to_text and await for answer"""
+    # complete shit but it works, not blocking the main event
+    thread = threading.Thread(target=cnv.speech_to_text)
+    thread.start()
+    while not cnv.result:
+        await asyncio.sleep(1)
+    return cnv.result

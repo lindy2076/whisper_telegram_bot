@@ -8,7 +8,7 @@ from stt_bot.config import Config
 from stt_bot.filters import SentFrom
 from stt_bot.utils import (
     Converter, model, Response,
-    try_remove, read_from_file
+    try_remove, read_from_file, convert_in_thread
 )
 from stt_bot.keyboards import (
     WhisperModelCallback, whisper_kb, start_kb,
@@ -65,7 +65,7 @@ async def voice_handler(message: types.Message, bot: Bot):
     ms = await message.reply("msg downloaded!")
 
     cnv = Converter(tmp_filename, model, f"{ms.chat.id}_{ms.message_id}")
-    res, lang = cnv.speech_to_text()
+    res, lang = await convert_in_thread(cnv)
     await ms.edit_text(
         Response.stt_response(res, lang, model.mdl),
         reply_markup=manage_transcript_kb
@@ -79,6 +79,7 @@ async def video_handler(message: types.Message):
 
 @main_router.message(F.video_note)
 async def video_note_handler(message: types.Message, bot: Bot):
+    """convert video note to text"""
     file_id = message.video_note.file_id
     tmp_filename = f"tmp/{file_id}.mp4"
     await bot.download(file=file_id, destination=tmp_filename)
@@ -86,7 +87,7 @@ async def video_note_handler(message: types.Message, bot: Bot):
 
     cnv = Converter(tmp_filename, model,
                     f"{ms.chat.id}_{ms.message_id}", is_video=True)
-    res, lang = cnv.speech_to_text()
+    res, lang = await convert_in_thread(cnv)
     await ms.edit_text(
         Response.stt_response(res, lang, model.mdl),
         reply_markup=manage_transcript_kb
