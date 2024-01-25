@@ -8,7 +8,7 @@ from stt_bot.config import Config
 from stt_bot.filters import SentFrom
 from stt_bot.utils import (
     Converter, model, Response,
-    try_remove, read_from_file, convert_in_thread
+    try_remove, read_from_file, add_to_q_and_convert
 )
 from stt_bot.keyboards import (
     WhisperModelCallback, whisper_kb, start_kb,
@@ -65,7 +65,8 @@ async def voice_handler(message: types.Message, bot: Bot):
     ms = await message.reply("msg downloaded!")
 
     cnv = Converter(tmp_filename, model, f"{ms.chat.id}_{ms.message_id}")
-    res, lang = await convert_in_thread(cnv)
+    res, lang = await add_to_q_and_convert(cnv)
+    # sometimes aiogram.exceptions.TelegramNetworkError is raised but idky
     await ms.edit_text(
         Response.stt_response(res, lang, model.mdl),
         reply_markup=manage_transcript_kb
@@ -87,7 +88,7 @@ async def video_note_handler(message: types.Message, bot: Bot):
 
     cnv = Converter(tmp_filename, model,
                     f"{ms.chat.id}_{ms.message_id}", is_video=True)
-    res, lang = await convert_in_thread(cnv)
+    res, lang = await add_to_q_and_convert(cnv)
     await ms.edit_text(
         Response.stt_response(res, lang, model.mdl),
         reply_markup=manage_transcript_kb
@@ -147,7 +148,7 @@ async def fmt_cleanup_callback_handler(
 async def fmt_callback_handler(
     query: types.CallbackQuery, callback_data: ManageTranscriptCallback
 ):
-    """reply to whisper model selection keyboard callback"""
+    """reply to selecting message format callback"""
     await query.answer()
     transcript_id = f"{query.from_user.id}_{query.message.message_id}"
 

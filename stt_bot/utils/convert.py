@@ -1,11 +1,11 @@
 import asyncio
 import datetime
 import subprocess
-import threading
 import logging
 from os import remove
 
 from .text_responses import Response
+from .queue import q
 
 
 FMT_SEPARATOR = "///---***???"
@@ -86,11 +86,17 @@ def read_from_file(filename: str, fmt: str) -> str:
         return res.split(FMT_SEPARATOR)[1]
 
 
-async def convert_in_thread(cnv: Converter):
-    """call Converter.speech_to_text and await for answer"""
+async def add_to_q_and_convert(cnv: Converter):
+    """
+    Call cnv.speech_to_text and await for answer.
+    This method puts cnv in queue.Queue and waits
+    for it to be processed.
+    """
     # complete shit but it works, not blocking the main event
-    thread = threading.Thread(target=cnv.speech_to_text)
-    thread.start()
+
+    q.put(cnv)
+    logging.info(f"{cnv.file_path} added to q")
     while not cnv.result:
         await asyncio.sleep(1)
+    logging.info(f"{cnv.file_path} awaited and returned")
     return cnv.result

@@ -1,5 +1,5 @@
 from .convert import (
-    Converter, try_remove, read_from_file, convert_in_thread
+    Converter, try_remove, read_from_file, add_to_q_and_convert
 )
 from .whisper_models import (
     model
@@ -11,5 +11,5 @@ from .text_responses import (
 
 __all__ = [
     "Converter", "model", "Response", "try_remove", "read_from_file",
-    "convert_in_thread"
+    "add_to_q_and_convert"
 ]
